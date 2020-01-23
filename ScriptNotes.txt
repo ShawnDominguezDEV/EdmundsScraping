@@ -1,0 +1,51 @@
+//Misc. Notes ***********************************
+//Website URL: https://www.edmunds.com/car-reviews/
+//Jquery ****************************************
+var jq = document.createElement('script');
+jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js";
+document.getElementsByTagName('head')[0].appendChild(jq);
+// ... give time for script to load, then type (or see below for non wait option)
+jQuery.noConflict();
+//Code ******************************************
+var myData;
+var lineResult = [];
+var arrayResult = [];
+var myLinks = [];
+var index = [$(".col a")];
+var links = 0;
+//Obtains the HREF links from each vehicle*******
+for(i=0; i<38; i++){
+myLinks.push($(".col a")[i].href);
+links++
+};
+//console.log(myLinks[3]);
+//console.log(myLinks.length);
+
+function getUrl(aurl){
+return $.ajax({
+type: "GET",
+url: aurl,
+cache: false,
+async: false
+}).responseText;
+};
+
+//console.log(myLinks[5]);
+//console.log(myLinks[10]);
+
+//ForLoop, hardcoded based on entries for the time being
+//Loops through each HREF and obtains the required data.
+//Required Data: Make,Model,Year/Price/Rating
+for(i=0;i<38;i++){
+myData = getUrl(myLinks[i]);
+
+//Adds data to an array to push into a table
+lineResult = [
+$(myData).find("h1").text().trim() + "*",
+$(myData).find(".mr-2 span").text().trim() + "*",
+$(myData).find(".heading-3 div").text().trim() + "*",
+"^"];
+arrayResult.push(lineResult);
+};
+//Builds data into a table
+console.table(arrayResult);
